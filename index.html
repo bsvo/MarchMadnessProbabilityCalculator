@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="./index.js"></script>
+</head>
+<style>
+/* 
+This html file builds the home page. The .matchup-block functions format the individual cells you can see that
+correspond to each matchup in the bracket. For .matchup-blockX, X is the number of the round we are in, so 
+.matchup-block2 is for the second column of 16 matchups in round two and so on and so forth 
+*/
+.matchup-block {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    height: 80px;
+    padding: 5px;
+    width: 125px;
+    transition: 0.5s;
+    position: absolute;
+    margin-left: -200px;
+    /* margin-bottom: 100px;
+    margin-top: 100px; */
+    vertical-align: middle;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* 
+The matchup-block:hover functions detail what happens when you hover the cursor over a matchup cell in a specific round
+As you can see when you hover over a cell, it gets surrounded by a light blue shadow.
+*/
+
+.matchup-block:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+.matchup-block2 {
+    border-radius: 15px;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    border: solid #150578 4px;
+    height: 80px;
+    padding: 5px;
+    width: 125px;
+    transition: 0.5s;
+    position:absolute;
+    margin-left: -190px;
+    margin-bottom: 100px;
+  }
+
+.matchup-block2:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+.matchup-block3 {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    height: 80px;
+    padding: 5px;
+    width: 125px;
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    position:absolute;
+    margin-left: -200px;
+    margin-bottom: 200px;
+  }
+
+.matchup-block3:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+.matchup-block4 {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    height: 80px;
+    padding: 5px;
+    width: 125px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s;
+    position:absolute;
+    margin-left: -140px;
+  }
+
+.matchup-block4:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+.matchup-block5 {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    height: 150px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 175px;
+    transition: 0.5s;
+    position:absolute;
+    margin-left: -300px;
+  }
+
+.matchup-block5:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+.matchup-block6 {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    height: 200px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 225px;
+    transition: 0.5s;
+    float: right;
+    margin-left: 900px;
+    margin-bottom: 20px;
+    position:relative;
+  }
+
+.matchup-block6:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+/* 
+the stat-block styles the cell that pops up when you click two different teams and it displays the probability 
+of that matchup happening
+*/
+.stat-block {
+  border-radius: 15px;
+    border: solid #2AAAF0 4px;
+    height: 250px;
+    padding: 5px;
+    display: flex;
+    width: 200px;
+    transition: 0.5s;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-bottom: 20px;
+    position:relative;
+  }
+
+.stat-block:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+hr{
+  width: 100px;
+
+}
+
+
+hr.header{
+  width: 1000px;
+
+}
+
+.bracket {
+  display: flex;
+  flex-direction:column;
+}
+
+h3 {
+  font-size: 13px;
+  font-family: Helvetica;
+  font-weight: 300;
+  color: #150578;
+  margin:auto
+}
+
+
+h4 {
+  font-size: 13px;
+  font-family: Helvetica;
+  font-weight: 300;
+  color: #150678;
+  margin-top:7px;
+}
+
+h3:hover {
+  transition: 0.2s;
+  box-shadow: 0px 0px 7px #FAED27;
+
+}
+
+
+
+
+.block-wrapper {
+    border-radius: 15px;
+    border: solid #150578 4px;
+    padding: 20px;
+    transition: 0.5s;
+}
+.block-wrapper:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 7px #2AAAF0;
+}
+
+
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+button{
+   position:absolute; border:0;
+}
+
+button:hover{
+  transition: 1s;
+  box-shadow: 0px 0px 7px #2AAAF0;
+}
+/* 
+Below is the html code for the entire bracket. It makes it so that each round is a child node of the previous round
+it also creats a unique ID for each matchup based on the conference and seeding of the matchup which is used 
+to retrive information. It also implements the onclicked funtion that calls the corresponding function that 
+shows probability from the index.js file
+*/
+</style> 
+<body style="background-color:rgb(233,233,255);">
+  <div class="container" style="margin-top: 50px; margin-bottom: 150px; text-align:center;">
+  	<h1 style="padding-bottom: 20px; text-align: center; text-shadow: 2px 2px #2AAAF0; font-family: Helvetica; color: #150578; font-size: 50px"> The Madness Calculator  </h1>
+  	<div class="block-wrapper" id="ok"  style="width: 1300px; height : 4000px; margin: auto; text-align:center;">
+      <h1 style="padding-bottom: auto; text-align: center; font-family: Helvetica; color: #150578; font-size: 35px; font-weight: lighter;"> To Pick a past NCAA Men's Basketball tournament: </h1>
+      <div style="margin-top:40px; margin-left: -200px;">
+        <select id="year-select" onchange="yearSelected();" style="display: inline;width: 150px;border-radius: 5px; height: 65px;font-size: 21px;margin-right: 35px;">
+          <option value="Option 1">Select a year</option>
+          </option>
+        </select>
+        <h1 style="display: inline; padding-bottom: auto; text-align: center; font-family: Helvetica; color: #150578; font-size: 35px; font-weight: lighter; margin-right: 35px;"> or </h1>
+        <button style="display: inline;border-radius: 5px; background: url(./mysterybox.png); height: 64px; width: 65px;" onclick="randomizeYear()"> </button>
+        <h1 style="display: inline; padding-bottom: auto; text-align: center; font-family: Helvetica; color: #150578; font-size: 35px; font-weight: lighter; margin-left: 100px;"> or </h1>
+        <button style="display: inline;border-radius: 5px; height: 64px; width: 200px; margin-left: 35px; color: #150578; font-size: 16px;" onclick="window.location.href='matchups.html'"> See the extra mad 2011 Tournament </button>
+      </div>
+      <div id = "bracket-holder" style="margin-top: 150px; margin-left: 100px; margin-bottom: 100px; margin-right: 100px;">
+        <h1 id= "bracket-header" style="text-shadow: 1.5px 1.5px #2ad9f0; display: inline; padding-bottom: auto; text-align: center; font-family: Helvetica; color: #150578; font-size: 40px; font-weight: normal; margin:auto;"> </h1>
+        <div id = "hr-manager" style="margin-bottom: 50px;"></div>
+          <div id = "bracket" class="bracket" style="margin-top: -80px;">
+            <div id = "stat-holder" style="height: 0px; display: flex; flex-direction: row;margin-left: 450px;"></div>
+            <div class="matchup-block6" id = "1-1-Finals" style="margin-top: 1600px;">
+              <h3 id="Coasts" style="font-size: 30px;"></h3>
+              <hr>
+              <h3 id="Inland" style="font-size: 30px;"></h3>
+              <div class = "matchup-block5" id = "West-East" style="margin-top:-800px">
+                <h3 id= "West-East-West" style="font-size: 20px;"></h3>
+                <hr>
+                <h3 id= "West-East-East" style="font-size: 20px;"></h3>
+                <div class = "matchup-block4" id = "1-2-West" style="margin-top:-450px">
+                  <h3 id= "1-2-West-1"></h3>
+                  <hr>
+                  <h3 id= "1-2-West-2"></h3>
+                  <div class = "matchup-block3" id = "1-4-West" style="margin-top:-200px">
+                    <h3 id= "1-4-West-1"></h3>
+                    <hr>
+                    <h3 id= "1-4-West-4"></h3>
+                    <div class = "matchup-block2" id = "1-8-West" style="margin-top: -100px;">
+                      <h3 id= "1-8-West-1"></h3>
+                      <hr>
+                      <h3 id= "1-8-West-8"></h3>
+                      <div class = "matchup-block" id = "1-16-West" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-West-1"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-West-16"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "8-9-West" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-West-8"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-West-9"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "4-5-West" style="margin-top:100px">
+                      <h3 id= "4-5-West-4"></h3>
+                      <hr>
+                      <h3 id= "4-5-West-5"></h3>
+                      <div class = "matchup-block" id = "5-12-West" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-West-5"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-West-12"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "4-13-West" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-West-4"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-West-13"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                  <div class = "matchup-block3" id = "2-3-West" style="margin-top:200px">
+                    <h3 id= "2-3-West-2"></h3>
+                    <hr>
+                    <h3 id= "2-3-West-3"></h3>
+                    <div class="matchup-block2" id = "3-6-West" style="margin-top:-100px">
+                      <h3 id= "3-6-West-3"></h3>
+                      <hr>
+                      <h3 id= "3-6-West-6"></h3>
+                      <div class = "matchup-block" id = "6-11-West" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-West-6"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-West-11"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "3-14-West" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-West-3"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-West-14"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "2-7-West" style="margin-top:100px">
+                      <h3 id= "2-7-West-2"></h3>
+                      <hr>
+                      <h3 id= "2-7-West-7"></h3>
+                      <div class = "matchup-block" id = "7-10-West" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-West-7"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-West-10"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "2-15-West" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-West-2"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-West-15"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+                <div class = "matchup-block4" id = "1-2-East" style="margin-top:450px;"> 
+                  <h3 id= "1-2-East-1"></h3>
+                  <hr>
+                  <h3 id= "1-2-East-2"></h3>
+                  <div class = "matchup-block3" id = "1-4-East" style="margin-top:-200px">
+                    <h3 id= "1-4-East-1"></h3>
+                    <hr>
+                    <h3 id= "1-4-East-4"></h3>
+                    <div class = "matchup-block2" id = "1-8-East" style="margin-top: -100px;">
+                      <h3 id= "1-8-East-1"></h3>
+                      <hr>
+                      <h3 id= "1-8-East-8"></h3>
+                      <div class = "matchup-block" id = "1-16-East" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-East-1"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-East-16"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "8-9-East" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-East-8"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-East-9"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "4-5-East" style="margin-top:100px">
+                      <h3 id= "4-5-East-4"></h3>
+                      <hr>
+                      <h3 id= "4-5-East-5"></h3>
+                      <div class = "matchup-block" id = "5-12-East" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-East-5"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-East-12"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "4-13-East" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-East-4"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-East-13"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                  <div class = "matchup-block3" id = "2-3-East" style="margin-top:200px">
+                    <h3 id= "2-3-East-2"></h3>
+                    <hr>
+                    <h3 id= "2-3-East-3"></h3>
+                    <div class="matchup-block2" id = "3-6-East" style="margin-top:-100px">
+                      <h3 id= "3-6-East-3"></h3>
+                      <hr>
+                      <h3 id= "3-6-East-6"></h3>
+                      <div class = "matchup-block" id = "6-11-East" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-East-6"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-East-11"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "3-14-East" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-East-3"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-East-14"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "2-7-East" style="margin-top:100px">
+                      <h3 id= "2-7-East-2"></h3>
+                      <hr>
+                      <h3 id= "2-7-East-7"></h3>
+                      <div class = "matchup-block" id = "7-10-East" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-East-7"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-East-10"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "2-15-East" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-East-2"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-East-15"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              <div class = "matchup-block5" id = "Midwest-South" style="margin-top:800px">
+                <h3 id= "Midwest-South-Midwest" style="font-size: 20px;"></h3>
+                <hr>
+                <h3 id= "Midwest-South-South" style="font-size: 20px;"></h3>
+                <div class = "matchup-block4" id = "1-2-Midwest" style="margin-top:-300px">
+                  <h3 id= "1-2-Midwest-1"></h3>
+                  <hr>
+                  <h3 id= "1-2-Midwest-2"></h3>
+                  <div class = "matchup-block3" id = "1-4-Midwest" style="margin-top:-200px">
+                    <h3 id= "1-4-Midwest-1"></h3>
+                    <hr>
+                    <h3 id= "1-4-Midwest-4"></h3>
+                    <div class = "matchup-block2" id = "1-8-Midwest" style="margin-top: -100px;">
+                      <h3 id= "1-8-Midwest-1"></h3>
+                      <hr>
+                      <h3 id= "1-8-Midwest-8"></h3>
+                      <div class = "matchup-block" id = "1-16-Midwest" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-Midwest-1"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-Midwest-16"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "8-9-Midwest" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-Midwest-8"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-Midwest-9"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "4-5-Midwest" style="margin-top:100px">
+                      <h3 id= "4-5-Midwest-4"></h3>
+                      <hr>
+                      <h3 id= "4-5-Midwest-5"></h3>
+                      <div class = "matchup-block" id = "5-12-Midwest" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-Midwest-5"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-Midwest-12"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "4-13-Midwest" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-Midwest-4"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-Midwest-13"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                  <div class = "matchup-block3" id = "2-3-Midwest" style="margin-top:200px">
+                    <h3 id= "2-3-Midwest-2"></h3>
+                    <hr>
+                    <h3 id= "2-3-Midwest-3"></h3>
+                    <div class="matchup-block2" id = "3-6-Midwest" style="margin-top:-100px">
+                      <h3 id= "3-6-Midwest-3"></h3>
+                      <hr>
+                      <h3 id= "3-6-Midwest-6"></h3>
+                      <div class = "matchup-block" id = "6-11-Midwest" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-Midwest-6"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-Midwest-11"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "3-14-Midwest" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-Midwest-3"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-Midwest-14"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "2-7-Midwest" style="margin-top:100px">
+                      <h3 id= "2-7-Midwest-2"></h3>
+                      <hr>
+                      <h3 id= "2-7-Midwest-7"></h3>
+                      <div class = "matchup-block" id = "7-10-Midwest" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-Midwest-7"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-Midwest-10"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "2-15-Midwest" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-Midwest-2"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-Midwest-15"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+                <div class = "matchup-block4" id = "1-2-South" style="margin-top:600px"> 
+                  <h3 id= "1-2-South-1"></h3>
+                  <hr>
+                  <h3 id= "1-2-South-2"></h3>
+                  <div class = "matchup-block3" id = "1-4-South" style="margin-top:-200px">
+                    <h3 id= "1-4-South-1"></h3>
+                    <hr>
+                    <h3 id= "1-4-South-4"></h3>
+                    <div class = "matchup-block2" id = "1-8-South" style="margin-top: -100px;">
+                      <h3 id= "1-8-South-1"></h3>
+                      <hr>
+                      <h3 id= "1-8-South-8"></h3>
+                      <div class = "matchup-block" id = "1-16-South" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-South-1"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "1-16-South-16"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "8-9-South" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-South-8"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "8-9-South-9"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "4-5-South" style="margin-top:100px">
+                      <h3 id= "4-5-South-4"></h3>
+                      <hr>
+                      <h3 id= "4-5-South-5"></h3>
+                      <div class = "matchup-block" id = "5-12-South" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-South-5"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "5-12-South-12"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "4-13-South" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-South-4"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "4-13-South-13"></h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class = "matchup-block3" id = "2-3-South" style="margin-top:200px">
+                    <h3 id= "2-3-South-2"></h3>
+                    <hr>
+                    <h3 id= "2-3-South-3"></h3>
+                    <div class="matchup-block2" id = "3-6-South" style="margin-top:-100px">
+                      <h3 id= "3-6-South-3"></h3>
+                      <hr>
+                      <h3 id= "3-6-South-6"></h3>
+                      <div class = "matchup-block" id = "6-11-South" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-South-6"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "6-11-South-11"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "3-14-South" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-South-3"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "3-14-South-14"></h3>
+                      </div>
+                    </div>
+                    <div class = "matchup-block2" id = "2-7-South" style="margin-top:100px">
+                      <h3 id= "2-7-South-2"></h3>
+                      <hr>
+                      <h3 id= "2-7-South-7"></h3>
+                      <div class = "matchup-block" id = "7-10-South" style="margin-top: -50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-South-7"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "7-10-South-10"></h3>
+                      </div>
+                      <div class = "matchup-block" id = "2-15-South" style="margin-top: 50px;">
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-South-2"></h3>
+                        <hr>
+                        <h3 onclick="onTeamClicked(this)" id= "2-15-South-15"></h3>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </body>
